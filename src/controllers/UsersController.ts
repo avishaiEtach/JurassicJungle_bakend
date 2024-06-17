@@ -108,6 +108,14 @@ class UsersController {
       if (!user) {
         throw new Error(`User with ID ${id} not found`);
       }
+      await user.populate("favArticles");
+      if (user.memberId) {
+        await user.populate("memberId");
+        await user.populate({
+          path: "memberId.dinosaurs",
+          model: "Dinosaur",
+        });
+      }
       const userToRes = user.toJSON();
       delete userToRes.password;
       req.session.user = userToRes;

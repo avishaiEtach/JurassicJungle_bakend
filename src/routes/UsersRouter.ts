@@ -9,7 +9,7 @@ router.get("/getLoggedInUser", auth, UsersController.getLoggedInUser);
 router.get("/logout", UsersController.logout);
 router.post("/login", UsersController.login);
 router.post("/signup", UsersController.signup);
-router.put("/updateDinosaur/:id", UsersController.updateUser);
+router.put("/updateUser/:id", auth, UsersController.updateUser);
 
 const UsersRouter = router;
 
