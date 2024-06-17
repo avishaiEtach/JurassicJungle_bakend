@@ -27,12 +27,16 @@ const UserSchema = new mongoose.Schema<User>(
       type: Number,
       enum: [1, 2, 3, 4],
     },
-    articles: [
+    favArticles: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Article", // Reference to the ArticleModel
       },
     ],
+    memberId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Member", // Reference to the MemberModel
+    },
   },
   {
     timestamps: true,

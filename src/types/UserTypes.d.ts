@@ -7,7 +7,8 @@ interface User {
   password?: string;
   dob: Date;
   permissions?: 1 | 2 | 3 | 4;
-  articles: string[];
+  favArticles: string[];
+  memberId?: any;
 }
 
 export { User };

@@ -49,6 +49,10 @@ const DinosaurSchema = new mongoose.Schema<Dinosaur>(
       type: Number,
       require: true,
     },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Member", // Reference to the MemberModel
+    },
   },
   {
     timestamps: true,

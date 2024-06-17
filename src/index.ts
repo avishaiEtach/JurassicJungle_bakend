@@ -4,7 +4,7 @@ import routes from "./routes";
 import cors from "cors";
 import { session, sessionConfig } from "./session";
 const path = require("path");
-
+require("./db/models");
 require("dotenv").config();
 
 const MONGO_URL =

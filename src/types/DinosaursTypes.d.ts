@@ -10,6 +10,7 @@ interface Dinosaur {
   period: string;
   mainArticle: string;
   bodyLength: number;
+  author?: string;
 }
 
 export { Dinosaur };

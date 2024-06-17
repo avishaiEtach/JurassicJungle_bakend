@@ -2,8 +2,8 @@ import express from "express";
 import { UserModel } from "../db/models/user";
 import session from "express-session";
 import { User } from "../types/UserTypes";
-import { deleteModel } from "mongoose";
 import { utilsFunctions } from "../utils/utilsFunctions";
+import { MemberModel } from "../db/models/member";
 
 class UsersController {
   getALLUsers = async (req: express.Request, res: express.Response) => {
@@ -28,7 +28,14 @@ class UsersController {
       if (encryptedPassword !== user.password) {
         throw new Error(`password not valid`);
       }
-      await user.populate("articles");
+      await user.populate("favArticles");
+      if (user.memberId) {
+        await user.populate("memberId");
+        await user.populate({
+          path: "memberId.dinosaurs",
+          model: "Dinosaur",
+        });
+      }
       const userToRes = user.toJSON();
       delete userToRes.password;
       req.session.user = userToRes;
@@ -52,7 +59,7 @@ class UsersController {
       const encryptedPassword = utilsFunctions.hashStringWithKey(user.password);
       user.password = encryptedPassword;
       user.permissions = 1;
-      user.articles = [];
+      user.favArticles = [];
       const newUser = new UserModel(user);
       const findUser = await UserModel.find({ email: newUser.email });
       if (findUser.length) {
@@ -84,6 +91,27 @@ class UsersController {
         }
       });
       return res.status(200).send();
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+
+  updateUser = async (req: express.Request, res: express.Response) => {
+    const { id } = req.params;
+    const { fieldsToChange } = req.body;
+    try {
+      const user = await UserModel.findByIdAndUpdate(
+        id,
+        { $set: fieldsToChange }, // Use $set to update only the specified fields
+        { new: true }
+      );
+      if (!user) {
+        throw new Error(`User with ID ${id} not found`);
+      }
+      const userToRes = user.toJSON();
+      delete userToRes.password;
+      req.session.user = userToRes;
+      return res.status(200).json(userToRes);
     } catch (err: any) {
       return res.status(400).send(err.message);
     }
