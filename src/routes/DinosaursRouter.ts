@@ -1,12 +1,13 @@
 import express from "express";
 import DinosaursController from "../controllers/DinosaursController";
 import { auth } from "../middlewares/auth.middlewares";
+import multer from "multer";
 
 const router = express.Router();
 
 router.get("/getDinosaurs/all", DinosaursController.getALLDinosaurs);
 router.get("/getDinosaurs/:id", DinosaursController.getDinosaurById);
-router.patch("/updateDinosaur/:id", DinosaursController.updateDinosaur);
+router.put("/updateDinosaur/:id", DinosaursController.updateDinosaur);
 router.post("/addDinosaur", DinosaursController.addDinosaur);
 router.post("/searchDinosaurs", DinosaursController.searchDinosaurs);
 router.post(

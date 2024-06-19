@@ -1,9 +1,10 @@
-import express from "express";
+import express, { response } from "express";
 import { DinosaurModel } from "../db/models/dinosaur";
 import { utilsFunctions } from "../utils/utilsFunctions";
 import { Dinosaur } from "../types/DinosaursTypes";
-import { v2 as cloudinary } from "cloudinary";
+import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
 import multer from "multer";
+import { InvalidatedProjectKind } from "typescript";
 
 class DinosaursController {
   getALLDinosaurs = async (req: express.Request, res: express.Response) => {
@@ -200,12 +201,18 @@ class DinosaursController {
       api_key: "532634431324769",
       api_secret: process.env.CLOUDINARY_API_SECRET, // Click 'View Credentials' below to copy your API secret
     });
+
+    const opts: UploadApiOptions = {
+      overwrite: true,
+      invalidate: true,
+      resource_type: "auto",
+      upload_preset: "JurassicJungle",
+    };
+
     try {
-      const uploadResult = await cloudinary.uploader.upload_large(
+      const uploadResult = await cloudinary.uploader.upload(
         req.body.image,
-        {
-          upload_preset: "JurassicJungle",
-        }
+        opts
       );
       return res.status(200).json(uploadResult?.secure_url ?? "");
     } catch (err: any) {
