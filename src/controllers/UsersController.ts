@@ -35,6 +35,10 @@ class UsersController {
           path: "memberId.dinosaurs",
           model: "Dinosaur",
         });
+        await user.populate({
+          path: "memberId.articles",
+          model: "Article",
+        });
       }
       const userToRes = user.toJSON();
       delete userToRes.password;
