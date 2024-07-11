@@ -24,6 +24,23 @@ class ArticlesController {
       const articles = await ArticleModel.find({
         favoriteGrade: { $gte: 8 },
       }).limit(6);
+      for (let index = 0; index < articles.length; index++) {
+        await articles[index].populate({
+          path: "author",
+          model: "Member",
+        });
+        await articles[index].populate({
+          path: "author.userId",
+          model: "User",
+        });
+        articles[index].author = `${
+          articles[index].author.academicTitle !== "none"
+            ? articles[index].author.academicTitle + "."
+            : ""
+        }${articles[index].author.userId.firstname} ${
+          articles[index].author.userId.lastname
+        }`;
+      }
       return res.status(200).json(articles);
     } catch (err: any) {
       return res.status(400).send(err.message);
@@ -40,6 +57,19 @@ class ArticlesController {
       if (!article) {
         throw new Error(`Article with ID ${id} not found`);
       }
+      await article.populate({
+        path: "author",
+        model: "Member",
+      });
+      await article.populate({
+        path: "author.userId",
+        model: "User",
+      });
+      article.author = `${
+        article.author.academicTitle !== "none"
+          ? article.author.academicTitle + "."
+          : ""
+      }${article.author.userId.firstname} ${article.author.userId.lastname}`;
       return res.status(200).json(article);
     } catch (err: any) {
       return res.status(400).send(err.message);
@@ -95,7 +125,7 @@ class ArticlesController {
   searchArticles = async (req: express.Request, res: express.Response) => {
     const { searchParameters } = req.body;
     const { page, limit } = req.query;
-    let articles: Article[] = await ArticleModel.find();
+    let articles = await ArticleModel.find();
     const query: any = {};
     try {
       // for (const value of searchParameters) {
@@ -134,12 +164,47 @@ class ArticlesController {
         searchParameters.length > 0 ? query : {}
       );
 
+      for (let index = 0; index < articles.length; index++) {
+        await articles[index].populate({
+          path: "author",
+          model: "Member",
+        });
+        await articles[index].populate({
+          path: "author.userId",
+          model: "User",
+        });
+        articles[index].author = `${
+          articles[index].author.academicTitle !== "none"
+            ? articles[index].author.academicTitle + "."
+            : ""
+        }${articles[index].author.userId.firstname} ${
+          articles[index].author.userId.lastname
+        }`;
+      }
       const paginationDinosaurs = utilsFunctions.getPagination(
         page,
         limit,
         articles
       );
       return res.status(200).json(paginationDinosaurs);
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+
+  updateArticle = async (req: express.Request, res: express.Response) => {
+    const { id } = req.params;
+    const { fieldsToChange } = req.body;
+    try {
+      const article = await ArticleModel.findByIdAndUpdate(
+        id,
+        { $set: fieldsToChange }, // Use $set to update only the specified fields
+        { new: true }
+      );
+      if (!article) {
+        throw new Error(`Dinosaur with ID ${id} not found`);
+      }
+      return res.status(200).json(article);
     } catch (err: any) {
       return res.status(400).send(err.message);
     }

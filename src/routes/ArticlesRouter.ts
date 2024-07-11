@@ -8,6 +8,7 @@ router.get("/getBestArticles", ArticlesController.getBestArticles);
 router.get("/getArticles/:id", ArticlesController.getLArticleById);
 router.get("/getKeyWords", ArticlesController.getKeyWords);
 router.post("/searchArticles", ArticlesController.searchArticles);
+router.put("/updateArticle/:id", ArticlesController.updateArticle);
 
 const ArticlesRouter = router;
 

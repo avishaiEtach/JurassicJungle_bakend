@@ -43,6 +43,10 @@ const ArticleSchema = new mongoose.Schema<Article>(
       type: [String],
       required: true,
     },
+    articleMainImage: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

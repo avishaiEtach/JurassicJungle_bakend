@@ -1,6 +1,6 @@
 interface Article {
   title: string;
-  author: string;
+  author: any;
   date: Date;
   topic: string;
   content: string;
@@ -9,6 +9,7 @@ interface Article {
   subTitle: string;
   thumbnailImage: string;
   keyWords: string[];
+  articleMainImage: string;
 }
 
 export { Article };

@@ -29,6 +29,29 @@ class MemberController {
           path: "memberId.dinosaurs",
           model: "Dinosaur",
         });
+        await user.populate({
+          path: "memberId.articles",
+          model: "Article",
+        });
+      }
+      if (user.memberId.articles) {
+        for (let index = 0; index < user.memberId.articles.length; index++) {
+          await user.memberId.articles[index].populate({
+            path: "author",
+            model: "Member",
+          });
+          await user.memberId.articles[index].populate({
+            path: "author.userId",
+            model: "User",
+          });
+          user.memberId.articles[index].author = `${
+            user.memberId.articles[index].author.academicTitle !== "none"
+              ? user.memberId.articles[index].author.academicTitle + "."
+              : ""
+          }${user.memberId.articles[index].author.userId.firstname} ${
+            user.memberId.articles[index].author.userId.lastname
+          }`;
+        }
       }
       const userToRes = user.toJSON();
       delete userToRes.password;
