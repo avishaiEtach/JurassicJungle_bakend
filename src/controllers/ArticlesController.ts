@@ -3,6 +3,7 @@ import { ArticleModel } from "../db/models/article";
 import { Article } from "../types/ArticlesTypes";
 import { utilsFunctions } from "../utils/utilsFunctions";
 import mongoose from "mongoose";
+import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
 
 class ArticlesController {
   getALLArticles = async (req: express.Request, res: express.Response) => {
@@ -205,6 +206,50 @@ class ArticlesController {
         throw new Error(`Dinosaur with ID ${id} not found`);
       }
       return res.status(200).json(article);
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+
+  uploadArticleImage = async (req: express.Request, res: express.Response) => {
+    cloudinary.config({
+      cloud_name: "maindevcloud",
+      api_key: "532634431324769",
+      api_secret: process.env.CLOUDINARY_API_SECRET, // Click 'View Credentials' below to copy your API secret
+    });
+
+    const opts: UploadApiOptions = {
+      overwrite: true,
+      invalidate: true,
+      resource_type: "auto",
+      upload_preset: "JurassicJungle",
+    };
+
+    try {
+      const uploadResult = await cloudinary.uploader.upload(
+        req.body.image,
+        opts
+      );
+      return res.status(200).json(uploadResult?.secure_url ?? "");
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+
+  addArticle = async (req: express.Request, res: express.Response) => {
+    let { article } = req.body;
+    try {
+      let newArticle = new ArticleModel(article);
+      const findArticle = await ArticleModel.find({ title: newArticle.title });
+      if (findArticle) {
+        throw new Error(
+          `The article ${newArticle.title} all ready in the system`
+        );
+      }
+      newArticle.favoriteGrade = 0;
+      newArticle.date = new Date(Date.now());
+      const savedArticle = await newArticle.save();
+      return res.status(200).json(savedArticle);
     } catch (err: any) {
       return res.status(400).send(err.message);
     }
