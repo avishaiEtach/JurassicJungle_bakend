@@ -37,6 +37,10 @@ const UserSchema = new mongoose.Schema<User>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Member", // Reference to the MemberModel
     },
+    employeeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Employee", // Reference to the EmployeeModel
+    },
   },
   {
     timestamps: true,

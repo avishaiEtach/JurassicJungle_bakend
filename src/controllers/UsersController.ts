@@ -9,6 +9,17 @@ class UsersController {
   getALLUsers = async (req: express.Request, res: express.Response) => {
     try {
       const users = await UserModel.find();
+      for (let index = 0; index < users.length; index++) {
+        if (users[index].employeeId) {
+          await users[index].populate({
+            path: "employeeId",
+            model: "Employee",
+          });
+        }
+        if (users[index].memberId) {
+          await users[index].populate("memberId");
+        }
+      }
       return res.status(200).json(users);
     } catch (err: any) {
       return res.status(400).send(err.message);
@@ -29,6 +40,12 @@ class UsersController {
         throw new Error(`password not valid`);
       }
       await user.populate("favArticles");
+      if (user.employeeId) {
+        await user.populate({
+          path: "employeeId",
+          model: "Employee",
+        });
+      }
       if (user.memberId) {
         await user.populate("memberId");
         await user.populate({
@@ -40,13 +57,13 @@ class UsersController {
           model: "Article",
         });
       }
-      if (user.memberId.articles) {
+      if (user?.memberId?.articles) {
         for (let index = 0; index < user.memberId.articles.length; index++) {
-          await user.memberId.articles[index].populate({
+          await user.memberId.articles[index]?.populate({
             path: "author",
             model: "Member",
           });
-          await user.memberId.articles[index].populate({
+          await user.memberId.articles[index]?.populate({
             path: "author.userId",
             model: "User",
           });
@@ -143,7 +160,7 @@ class UsersController {
           model: "Article",
         });
       }
-      if (user.memberId.articles) {
+      if (user?.memberId?.articles) {
         for (let index = 0; index < user.memberId.articles.length; index++) {
           await user.memberId.articles[index].populate({
             path: "author",
@@ -161,6 +178,9 @@ class UsersController {
             user.memberId.articles[index].author.userId.lastname
           }`;
         }
+      }
+      if (user.employeeId) {
+        await user.populate("employeeId");
       }
       const userToRes = user.toJSON();
       delete userToRes.password;

@@ -34,7 +34,7 @@ class MemberController {
           model: "Article",
         });
       }
-      if (user.memberId.articles) {
+      if (user?.memberId?.articles) {
         for (let index = 0; index < user.memberId.articles.length; index++) {
           await user.memberId.articles[index].populate({
             path: "author",
