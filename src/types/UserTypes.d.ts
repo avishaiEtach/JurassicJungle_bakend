@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { Member } from "./MemberTypes";
+import { Employee } from "./EmployeeTYpes";
 
 interface User {
   firstname: string;
@@ -8,7 +10,8 @@ interface User {
   dob: Date;
   permissions?: 1 | 2 | 3 | 4;
   favArticles: string[];
-  memberId?: any;
+  memberId?: Member;
+  employeeId?: Employee;
 }
 
 export { User };
