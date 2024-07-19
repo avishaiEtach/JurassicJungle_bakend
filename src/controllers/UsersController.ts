@@ -4,11 +4,20 @@ import session from "express-session";
 import { User } from "../types/UserTypes";
 import { utilsFunctions } from "../utils/utilsFunctions";
 import { MemberModel } from "../db/models/member";
+import mongoose from "mongoose";
 
 class UsersController {
   getALLUsers = async (req: express.Request, res: express.Response) => {
     try {
       const users = await UserModel.find();
+      for (let i = 0; i < users.length; i++) {
+        if (users[i].memberId) {
+          await users[i].populate("memberId");
+        }
+        if (users[i].memberId) {
+          await users[i].populate("employeeId");
+        }
+      }
       return res.status(200).json(users);
     } catch (err: any) {
       return res.status(400).send(err.message);
@@ -143,6 +152,32 @@ class UsersController {
       delete userToRes.password;
       req.session.user = userToRes;
       return res.status(200).json(userToRes);
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+
+  deleteUser = async (req: express.Request, res: express.Response) => {
+    const { id } = req.params;
+    try {
+      const user = await UserModel.findById(id).deleteOne();
+      if (!user) {
+        throw new Error(`User with ID ${id} not found`);
+      }
+      return res.status(200).send();
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+
+  deleteManyUser = async (req: express.Request, res: express.Response) => {
+    const { idsToDelete } = req.body;
+    try {
+      const objectIds = idsToDelete.map(
+        (id: string) => new mongoose.Types.ObjectId(id)
+      );
+      const result = await UserModel.deleteMany({ _id: { $in: objectIds } });
+      return res.status(200).send();
     } catch (err: any) {
       return res.status(400).send(err.message);
     }
