@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Member } from "./MemberTypes";
-import { Employee } from "./EmployeeTYpes";
+import { Employee } from "./EmployeeTypes";
 
 interface User {
   firstname: string;
