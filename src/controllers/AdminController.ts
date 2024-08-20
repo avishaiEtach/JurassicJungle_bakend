@@ -8,6 +8,7 @@ import { EmployeeModel } from "../db/models/employee";
 import { ArticleModel } from "../db/models/article";
 import { DinosaurModel } from "../db/models/dinosaur";
 import { MailModel } from "../db/models/mail";
+import { Mail } from "../types/mailTypes";
 
 class AdminController {
   getUsersByRole = async (req: express.Request, res: express.Response) => {
@@ -262,6 +263,22 @@ class AdminController {
       delete userToRes.password;
       req.session.user = userToRes;
       return res.status(200).json(userToRes);
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+
+  createMail = async (req: express.Request, res: express.Response) => {
+    let { mail } = req.body;
+    try {
+      const newMail = new MailModel({
+        ...mail,
+        sendTime: new Date().toISOString(),
+        read: false,
+        fromSend: req.session.user?.email,
+      });
+      const savedMail = await newMail.save();
+      return res.status(200).json(savedMail);
     } catch (err: any) {
       return res.status(400).send(err.message);
     }

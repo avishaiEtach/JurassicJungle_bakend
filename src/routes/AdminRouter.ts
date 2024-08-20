@@ -14,6 +14,7 @@ router.get(
 );
 router.get("/getIncomeExpenses", auth, AdminController.getIncomeExpenses);
 router.post("/updateMail/:id", auth, AdminController.updateMail);
+router.post("/createMail", auth, AdminController.createMail);
 
 const AdminRouter = router;
 
