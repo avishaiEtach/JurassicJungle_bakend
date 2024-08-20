@@ -13,6 +13,7 @@ router.get(
   AdminController.getDinosaursVsArticles
 );
 router.get("/getIncomeExpenses", auth, AdminController.getIncomeExpenses);
+router.post("/updateMail/:id", auth, AdminController.updateMail);
 
 const AdminRouter = router;
 

@@ -1,4 +1,7 @@
+import { Mail } from "./mailTypes";
+
 interface Employee {
+  _id: string;
   image: string;
   jobTitleName: string;
   salary: number;
@@ -8,6 +11,7 @@ interface Employee {
   gender: "Male" | "Female" | "Other";
   age: number;
   userId: string;
+  mails: Mail[];
 }
 
 export { Employee };

@@ -5,6 +5,7 @@ import { User } from "../types/UserTypes";
 import { utilsFunctions } from "../utils/utilsFunctions";
 import { MemberModel } from "../db/models/member";
 import mongoose from "mongoose";
+import { MailModel } from "../db/models/mail";
 
 class UsersController {
   getALLUsers = async (req: express.Request, res: express.Response) => {
@@ -43,10 +44,12 @@ class UsersController {
       }
       await user.populate("favArticles");
       if (user.employeeId) {
+        const mails = await MailModel.find({ employeeId: user.employeeId });
         await user.populate({
           path: "employeeId",
           model: "Employee",
         });
+        user.employeeId.mails = mails;
       }
       if (user.memberId) {
         await user.populate("memberId");
@@ -182,7 +185,12 @@ class UsersController {
         }
       }
       if (user.employeeId) {
-        await user.populate("employeeId");
+        const mails = await MailModel.find({ employeeId: user.employeeId });
+        await user.populate({
+          path: "employeeId",
+          model: "Employee",
+        });
+        user.employeeId.mails = mails;
       }
       const userToRes = user.toJSON();
       delete userToRes.password;

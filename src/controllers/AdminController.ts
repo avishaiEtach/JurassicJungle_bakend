@@ -7,6 +7,7 @@ import { MemberModel } from "../db/models/member";
 import { EmployeeModel } from "../db/models/employee";
 import { ArticleModel } from "../db/models/article";
 import { DinosaurModel } from "../db/models/dinosaur";
+import { MailModel } from "../db/models/mail";
 
 class AdminController {
   getUsersByRole = async (req: express.Request, res: express.Response) => {
@@ -196,6 +197,70 @@ class AdminController {
       const savedUser = await newUser.save();
       const userToRes = savedUser.toObject();
       delete userToRes.password;
+      return res.status(200).json(userToRes);
+    } catch (err: any) {
+      return res.status(400).send(err.message);
+    }
+  };
+  updateMail = async (req: express.Request, res: express.Response) => {
+    const { id } = req.params;
+    const { fieldsToChange } = req.body;
+    try {
+      const mail = await MailModel.findByIdAndUpdate(
+        id,
+        { $set: fieldsToChange }, // Use $set to update only the specified fields
+        { new: true }
+      );
+      if (!mail) {
+        throw new Error(`Mail with ID ${id} not found`);
+      }
+      await mail.populate("employeeId");
+      const user = await UserModel.findById(mail.employeeId.userId);
+      if (!user) {
+        throw new Error(`User ${id} not found`);
+      }
+      await user.populate("favArticles");
+      if (user.memberId) {
+        await user.populate("memberId");
+        await user.populate({
+          path: "memberId.dinosaurs",
+          model: "Dinosaur",
+        });
+        await user.populate({
+          path: "memberId.articles",
+          model: "Article",
+        });
+      }
+      if (user?.memberId?.articles) {
+        for (let index = 0; index < user.memberId.articles.length; index++) {
+          await user.memberId.articles[index].populate({
+            path: "author",
+            model: "Member",
+          });
+          await user.memberId.articles[index].populate({
+            path: "author.userId",
+            model: "User",
+          });
+          user.memberId.articles[index].author = `${
+            user.memberId.articles[index].author.academicTitle !== "none"
+              ? user.memberId.articles[index].author.academicTitle + "."
+              : ""
+          }${user.memberId.articles[index].author.userId.firstname} ${
+            user.memberId.articles[index].author.userId.lastname
+          }`;
+        }
+      }
+      if (user.employeeId) {
+        const mails = await MailModel.find({ employeeId: user.employeeId });
+        await user.populate({
+          path: "employeeId",
+          model: "Employee",
+        });
+        user.employeeId.mails = mails;
+      }
+      const userToRes = user.toJSON();
+      delete userToRes.password;
+      req.session.user = userToRes;
       return res.status(200).json(userToRes);
     } catch (err: any) {
       return res.status(400).send(err.message);

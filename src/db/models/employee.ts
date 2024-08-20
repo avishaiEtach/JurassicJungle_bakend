@@ -40,6 +40,12 @@ const EmployeeSchema = new mongoose.Schema<Employee>(
       type: String,
       require: true,
     },
+    mails: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Mail", // Reference to the MailModel
+      },
+    ],
   },
   {
     timestamps: true,
