@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Mail } from "../../types/mailTypes";
+import { Mail } from "../../types/MailTypes";
 
 const MailSchema = new mongoose.Schema<Mail>(
   {
