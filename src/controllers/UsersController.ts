@@ -43,6 +43,23 @@ class UsersController {
         throw new Error(`password not valid`);
       }
       await user.populate("favArticles");
+      for (let i = 0; i < user.favArticles.length; i++) {
+        await (user.favArticles[i] as any).populate({
+          path: "author",
+          model: "Member",
+        });
+        await (user.favArticles[i] as any).populate({
+          path: "author.userId",
+          model: "User",
+        });
+        (user.favArticles[i] as any).author = `${
+          (user.favArticles[i] as any).author.academicTitle !== "none"
+            ? (user.favArticles[i] as any).author.academicTitle + "."
+            : ""
+        }${(user.favArticles[i] as any).author.userId.firstname} ${
+          (user.favArticles[i] as any).author.userId.lastname
+        }`;
+      }
       if (user.employeeId) {
         const mails = await MailModel.find({ employeeId: user.employeeId });
         await user.populate({
@@ -154,6 +171,23 @@ class UsersController {
         throw new Error(`User with ID ${id} not found`);
       }
       await user.populate("favArticles");
+      for (let i = 0; i < user.favArticles.length; i++) {
+        await (user.favArticles[i] as any).populate({
+          path: "author",
+          model: "Member",
+        });
+        await (user.favArticles[i] as any).populate({
+          path: "author.userId",
+          model: "User",
+        });
+        (user.favArticles[i] as any).author = `${
+          (user.favArticles[i] as any).author.academicTitle !== "none"
+            ? (user.favArticles[i] as any).author.academicTitle + "."
+            : ""
+        }${(user.favArticles[i] as any).author.userId.firstname} ${
+          (user.favArticles[i] as any).author.userId.lastname
+        }`;
+      }
       if (user.memberId) {
         await user.populate("memberId");
         await user.populate({

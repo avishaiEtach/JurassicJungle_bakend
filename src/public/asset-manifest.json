@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2d2b1082.css",
+    "main.js": "/static/js/main.4f8089cf.js",
+    "static/js/787.2dea1c6b.chunk.js": "/static/js/787.2dea1c6b.chunk.js",
+    "static/media/card1.jpg": "/static/media/card1.38538d4221fdbda98c6f.jpg",
+    "static/media/Montserrat-VariableFont_wght.ttf": "/static/media/Montserrat-VariableFont_wght.7e687123cd4528224ce5.ttf",
+    "static/media/card2.jpg": "/static/media/card2.e739aa4c52cec903bf63.jpg",
+    "static/media/Comfortaa-Regular.ttf": "/static/media/Comfortaa-Regular.051d690872878482e7e7.ttf",
+    "static/media/ef5.png": "/static/media/ef5.6e9a14a3d477b058f5f2.png",
+    "static/media/ef.png": "/static/media/ef.03513f802587a51e2ec7.png",
+    "static/media/ef2.png": "/static/media/ef2.a1fe3606827efd210960.png",
+    "static/media/ef7.png": "/static/media/ef7.90589fdc1543e26214aa.png",
+    "static/media/ef8.png": "/static/media/ef8.cb9a3f78b69c996dcc9a.png",
+    "static/media/logoGif.gif": "/static/media/logoGif.7a4cae8f123976b76d70.gif",
+    "static/media/ef9.png": "/static/media/ef9.0d850c14c8c8657315b1.png",
+    "static/media/logo4.png": "/static/media/logo4.39837a7a4f03a51a0cb7.png",
+    "static/media/card4.jpg": "/static/media/card4.a0e5970e1e3c7a8c45d6.jpg",
+    "static/media/card6.jpg": "/static/media/card6.eecb76c7c5f957bb9d2c.jpg",
+    "static/media/editDin.svg": "/static/media/editDin.0eaa2d03b695858c12eec74a7fa5fc88.svg",
+    "static/media/na.svg": "/static/media/na.bebf3232555d12084c2739d8a73e32aa.svg",
+    "static/media/as.svg": "/static/media/as.b315581bc91363c5eaff1b9d97055a83.svg",
+    "static/media/eu.svg": "/static/media/eu.d905bde005c08005050a81505dcc46f8.svg",
+    "static/media/EditArticles.svg": "/static/media/EditArticles.0c9fa4363632cd2581ce7d790461cab9.svg",
+    "static/media/af.svg": "/static/media/af.995194177a6f686b9646c0148d4eaced.svg",
+    "static/media/sa.svg": "/static/media/sa.df5cf036539feb0d71569306e4158297.svg",
+    "index.html": "/index.html",
+    "main.2d2b1082.css.map": "/static/css/main.2d2b1082.css.map",
+    "main.4f8089cf.js.map": "/static/js/main.4f8089cf.js.map",
+    "787.2dea1c6b.chunk.js.map": "/static/js/787.2dea1c6b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2d2b1082.css",
+    "static/js/main.4f8089cf.js"
+  ]
+}
