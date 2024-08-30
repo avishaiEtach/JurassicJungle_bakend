@@ -1,4 +1,4 @@
-import { Mail } from "./mailTypes";
+import { Mail } from "./MailTypes";
 
 interface Employee {
   _id: string;

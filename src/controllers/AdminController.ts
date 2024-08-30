@@ -8,7 +8,7 @@ import { EmployeeModel } from "../db/models/employee";
 import { ArticleModel } from "../db/models/article";
 import { DinosaurModel } from "../db/models/dinosaur";
 import { MailModel } from "../db/models/mail";
-import { Mail } from "../types/mailTypes";
+import { Mail } from "../types/MailTypes";
 
 class AdminController {
   getUsersByRole = async (req: express.Request, res: express.Response) => {
