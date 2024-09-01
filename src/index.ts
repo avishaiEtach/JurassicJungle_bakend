@@ -32,7 +32,7 @@ app.use(express.json());
 
 app.use(session(sessionConfig));
 
-app.use("/", ...routes);
+app.use(process.env.NODE_ENV === "production" ? "/api" : "/", ...routes);
 
 const port = process.env.PORT || 8080;
 
